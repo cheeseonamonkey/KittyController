@@ -2,25 +2,25 @@
   {
     "id": 1,
     "name": "Elsa",
-    "isOutside": false,
-    "lastUpdate": 1726900651
+    "isOutside": true,
+    "lastUpdate": 1726937556
   },
   {
     "id": 2,
     "name": "Monkey",
-    "isOutside": false,
-    "lastUpdate": 1726900651
+    "isOutside": true,
+    "lastUpdate": 1726937556
   },
   {
     "id": 3,
     "name": "Freyja",
-    "isOutside": false,
-    "lastUpdate": 1726900651
+    "isOutside": true,
+    "lastUpdate": 1726937556
   },
   {
     "id": 4,
     "name": "Stormy",
-    "isOutside": false,
-    "lastUpdate": 1726900651
+    "isOutside": true,
+    "lastUpdate": 1726937556
   }
 ]
