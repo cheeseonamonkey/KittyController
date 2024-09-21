@@ -87,10 +87,29 @@ npx test
 
 ---
 
-## Release Version Notes
+## Release Notes
 
-### Version 0.1
-- Initial release with basic functionality.
+#### 0.1
+- MVP
+#### 0.2
+- thorough unit testing
+#### 0.3
+- styling improvements _(tailwindcss)_
+- debug/utility buttons:
+  - show/hide seconds checkbox
+  - force update
+  - force refresh when page is stale
+  - refresh button
+  - last updated time for each cat
+#### Planned:
+- _(server)_ Do not update time if the existing time is within the last 60 seconds.
+- _(client)_ Add pictures for each cat.
+- _(client)_ Better UI for touchscreens. 
+#### Maybe in the future?
+- wrap as android app?
+- push notifications?? (either via android app, firebase, or chrome)
+- dark mode switch?
+
 
 ---
 
