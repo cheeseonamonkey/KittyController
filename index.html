@@ -4,28 +4,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cat Tracker</title>
+    <title>Kitty Kontroller</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        .draggable {
-            cursor: grab;
+        .clickable {
+            transition: background-color 0.3s ease;
         }
 
-        .dragging {
-            opacity: 0.5;
+        .clickable:hover {
+            background-color: #d1d5db;
+        }
+
+        button,
+        a {
+            min-width: 100px;
+            padding: 12px;
         }
     </style>
 </head>
 
-<body class="bg-gray-100 flex flex-col justify-center items-center h-screen p-4">
+<body class="bg-gray-200 flex flex-col justify-center items-center min-h-screen p-4">
+    <h1 class="text-4xl font-bold text-center mb-6 text-yellow-700">Kitty Kontroller</h1>
     <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 w-full max-w-3xl">
-        <div id="inside" class="bg-white p-4 rounded shadow-lg flex-1">
-            <h2 class="text-xl font-semibold mb-4">Inside</h2>
+        <div id="inside" class="bg-white p-4 rounded-lg shadow-lg flex-1">
+            <h2 class="text-2xl font-semibold mb-4 text-green-700">Inside</h2>
             <div id="inside-list" class="space-y-2"></div>
         </div>
-        <div id="outside" class="bg-white p-4 rounded shadow-lg flex-1">
-            <h2 class="text-xl font-semibold mb-4">Outside</h2>
+        <div id="outside" class="bg-white p-4 rounded-lg shadow-lg flex-1">
+            <h2 class="text-2xl font-semibold mb-4 text-red-700">Outside</h2>
             <div id="outside-list" class="space-y-2"></div>
+        </div>
+    </div>
+
+    <div id="last-updated" class="mt-6 mb-6 text-gray-700 text-center"></div>
+
+    <div class="mt-4 flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+        <a id="refresh" href="#"
+            class="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-500 transition focus:outline-none focus:ring-2 focus:ring-blue-400"
+            onclick="location.reload(); return false;">Refresh</a>
+
+        <button id="force-fetch"
+            class="bg-red-700 text-white px-4 py-2 rounded hover:bg-red-500 transition focus:outline-none focus:ring-2 focus:ring-red-400">Force
+            Fetch</button>
+
+        <button id="set-all-inside"
+            class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-500 transition focus:outline-none focus:ring-2 focus:ring-green-400">Set
+            All Inside</button>
+
+        <div class="flex items-center">
+            <input type="checkbox" id="hideSeconds" class="mr-2 text-gray-700" checked>
+            <label for="hideSeconds" class="text-sm text-gray-700">Hide seconds</label>
         </div>
     </div>
 
@@ -33,11 +61,18 @@
         const apiUrl = '/api/cats';
         const insideList = document.getElementById('inside-list');
         const outsideList = document.getElementById('outside-list');
+        const lastUpdatedElement = document.getElementById('last-updated');
+        let lastFetchTime = Date.now();
+        const fetchInterval = 40 * 1000; // 40 seconds
 
         const fetchCats = async () => {
             const response = await fetch(apiUrl);
+            if (!response.ok) {
+                window.location.reload();
+            }
             const cats = await response.json();
             renderCats(cats);
+            lastFetchTime = Date.now();
         };
 
         const renderCats = (cats) => {
@@ -46,52 +81,28 @@
 
             cats.forEach(cat => {
                 const catElement = document.createElement('div');
-                catElement.className = 'draggable bg-gray-200 p-2 rounded shadow cursor-pointer';
-                catElement.draggable = true;
-                catElement.innerText = cat.name;
+                catElement.className = 'clickable bg-gray-300 p-3 rounded-md shadow-sm mb-2';
+                catElement.innerHTML = `
+                <div class="cat-container">
+                    <div class="cat-name text-gray-800 font-bold">${cat.name}</div>
+                    <div class="cat-update text-gray-500">${formatTimeElapsed(cat.lastUpdate)}</div>
+                </div>
+            `;
 
                 catElement.addEventListener('click', async () => {
-                    const newStatus = !cat.isOutside; // Toggle status
+                    const newStatus = !cat.isOutside;
                     await updateCatStatus(cat.name, newStatus);
                     fetchCats();
                 });
 
-                catElement.addEventListener('dragstart', () => {
-                    catElement.classList.add('dragging');
-                    catElement.dataset.catName = cat.name;
-                });
-
-                catElement.addEventListener('dragend', () => {
-                    catElement.classList.remove('dragging');
-                });
-
-                insideList.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                });
-
-                outsideList.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                });
-
-                insideList.addEventListener('drop', async (e) => {
-                    e.preventDefault();
-                    await updateCatStatus(cat.name, false); // Set as inside
-                    fetchCats();
-                });
-
-                outsideList.addEventListener('drop', async (e) => {
-                    e.preventDefault();
-                    await updateCatStatus(cat.name, true); // Set as outside
-                    fetchCats();
-                });
-
-                // Initially categorize cats based on their status
                 if (cat.isOutside) {
                     outsideList.appendChild(catElement);
                 } else {
                     insideList.appendChild(catElement);
                 }
             });
+
+            updateTimestamp();
         };
 
         const updateCatStatus = async (catName, isOutside) => {
@@ -103,7 +114,76 @@
             });
         };
 
+        const setAllInside = async () => {
+            const cats = await fetch(apiUrl).then(response => response.json());
+            await Promise.all(cats.map(cat => updateCatStatus(cat.name, false)));
+            fetchCats();
+        };
+
+        const hideSecondsCheckbox = document.getElementById('hideSeconds');
+        let hideSeconds = localStorage.getItem('hideSeconds') === 'true';
+
+        hideSecondsCheckbox.checked = (hideSeconds === undefined) ? true : hideSeconds;
+
+        hideSecondsCheckbox.addEventListener('change', (e) => {
+            hideSeconds = e.target.checked;
+            localStorage.setItem('hideSeconds', hideSeconds);
+            updateTimestamp();
+        });
+
+        const formatTimeElapsed = (lastUpdate) => {
+            const timeElapsed = Math.floor((Date.now() / 1000) - lastUpdate);
+            const days = Math.floor(timeElapsed / (3600 * 24));
+            const hours = Math.floor((timeElapsed % (3600 * 24)) / 3600);
+            const minutes = Math.floor((timeElapsed % 3600) / 60);
+            const seconds = timeElapsed % 60;
+
+            const timeParts = [];
+            if (days > 0) timeParts.push(`${days}d`);
+            if (hours > 0) timeParts.push(`${hours}h`);
+            if (minutes > 0) timeParts.push(`${minutes}m`);
+            if (!hideSeconds || timeParts.length === 0) timeParts.push(`${seconds}s`);
+
+            return timeParts.join(' ');
+        };
+
+        const updateTimestamp = () => {
+            const timeElapsed = Math.floor((Date.now() - lastFetchTime) / 1000);
+            const days = Math.floor(timeElapsed / (3600 * 24));
+            const hours = Math.floor((timeElapsed % (3600 * 24)) / 3600);
+            const minutes = Math.floor((timeElapsed % 3600) / 60);
+            const seconds = timeElapsed % 60;
+
+            const timeParts = [];
+            if (days > 0) timeParts.push(`${days}d`);
+            if (hours > 0) timeParts.push(`${hours}h`);
+            if (minutes > 0) timeParts.push(`${minutes}m`);
+            if (!hideSeconds || timeParts.length === 0) timeParts.push(`${seconds}s`);
+
+            lastUpdatedElement.innerText = timeParts.length > 0
+                ? `Last fetched: ${timeParts.join(' ')} ago`
+                : '';
+        };
+
         fetchCats();
+        setInterval(fetchCats, fetchInterval);
+        setInterval(updateTimestamp, 1000);
+
+        const refreshButton = document.getElementById('refresh');
+        const forceFetchButton = document.getElementById('force-fetch');
+        const setAllInsideButton = document.getElementById('set-all-inside');
+
+        refreshButton.addEventListener('click', fetchCats);
+        forceFetchButton.addEventListener('click', async () => {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+                window.location.reload();
+            }
+            const cats = await response.json();
+            renderCats(cats);
+            lastFetchTime = Date.now();
+        });
+        setAllInsideButton.addEventListener('click', setAllInside);
     </script>
 </body>
 
