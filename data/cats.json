@@ -1,26 +1,26 @@
 [
-    {
-        "id": 1,
-        "name": "Elsa",
-        "isOutside": true,
-        "lastUpdate": 0
-    },
-    {
-        "id": 2,
-        "name": "Monkey",
-        "isOutside": false,
-        "lastUpdate": 0
-    },
-    {
-        "id": 3,
-        "name": "Freyja",
-        "isOutside": true,
-        "lastUpdate": 0
-    },
-    {
-        "id": 4,
-        "name": "Stormy",
-        "isOutside": false,
-        "lastUpdate": 0
-    }
+  {
+    "id": 1,
+    "name": "Elsa",
+    "isOutside": true,
+    "lastUpdate": 1726892469
+  },
+  {
+    "id": 2,
+    "name": "Monkey",
+    "isOutside": true,
+    "lastUpdate": 1726892469
+  },
+  {
+    "id": 3,
+    "name": "Freyja",
+    "isOutside": true,
+    "lastUpdate": 1726892469
+  },
+  {
+    "id": 4,
+    "name": "Stormy",
+    "isOutside": true,
+    "lastUpdate": 1726892469
+  }
 ]
