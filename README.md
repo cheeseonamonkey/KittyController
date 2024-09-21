@@ -1,8 +1,6 @@
 # Kitty Kontroller - README
 
-## Overview
-
-Kitty Kontroller is a simple web app to manage and monitor the status of cats (whether they are inside or outside). It includes an interactive UI to toggle each cat's status and features an API for external integration.
+Kitty Kontroller is a simple web app to manage and monitor the status of cats (whether they are inside or outside).
 
 
 ---
@@ -46,39 +44,39 @@ Thorough unit testing is implemented; while hosting on port 3000, to run tests:
 npx test
 ```
 
-#### Test results:
+### <u>Test results</u>:
 
+<details>
+<pre style="font-family: monospace;">
 
-```diff
- PASS  tests/server.test.js
-  API endpoints
-    Cats
-      Fetch Operations
-+        ✓ fetches all cats (34 ms)
-+        ✓ fetches a specific cat (3 ms)
-+        ✓ handles invalid cat names (64 ms)
-+        ✓ handles unknown parameters gracefully (2 ms)
-+        ✓ is case-insensitive for cat names (2 ms)
-+        ✓ returns correct headers (3 ms)
-      Update Operations
-+        ✓ updates cat outside status (7 ms)
-+        ✓ handles invalid isOutside values (5 ms)
-+        ✓ handles concurrent updates correctly (7 ms)
-+        ✓ toggles outside multiple times (19 ms)
-+        ✓ handles idempotent updates (4 ms)
-+        ✓ sets all cats to outside (6 ms)
+<h4> Fetch Operations: </h4>
+- <span style="color: green;">&#x2705;</span> **Fetches all cats** — _34ms_
+- <span style="color: green;">&#x2705;</span> **Fetches a specific cat** — _3ms_
+- <span style="color: green;">&#x2705;</span> **Handles invalid cat names** — _64ms_
+- <span style="color: green;">&#x2705;</span> **Handles unknown parameters gracefully** — _2ms_
+- <span style="color: green;">&#x2705;</span> **Case-insensitive for cat names** — _2ms_
+- <span style="color: green;">&#x2705;</span> **Returns correct headers** — _3ms_
 
-Test Suites: 1 passed, 1 total
-Tests:       12 passed, 12 total
-Snapshots:   0 total
-Time:        0.586 s, estimated 1 s
-Ran all test suites.
-```
+<h4> Update Operations: </h4>
+- <span style="color: green;">&#x2705;</span> **Updates cat outside status** — _7ms_
+- <span style="color: green;">&#x2705;</span> **Handles invalid `isOutside` values** — _5ms_
+- <span style="color: green;">&#x2705;</span> **Handles concurrent updates correctly** — _7ms_
+- <span style="color: green;">&#x2705;</span> **Toggles outside status multiple times** — _19ms_
+- <span style="color: green;">&#x2705;</span> **Handles idempotent updates** — _4ms_
+- <span style="color: green;">&#x2705;</span> **Sets all cats to outside status** — _6ms_
 
 ---
 
 
----
+- **Test Suites**: <span style="color: green;">1 passed</span>, 1 total
+- **Tests**: <span style="color: green;">12 passed</span>, 12 total
+
+
+</pre>
+</details>
+
+
+
 
 ## License
 
