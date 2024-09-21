@@ -67,23 +67,37 @@ Unit tests can be run with:
 npx test
 ```
 
+
+
 <details>
 <summary><b><u>Test Results</u></b>:</summary>
 <pre style="font-family: monospace;">
+
 <h4> Fetch Operations: </h4>
-- ✅ **Fetches all cats** — _34ms_
-- ✅ **Fetches a specific cat** — _3ms_
-- ✅ **Handles invalid cat names** — _64ms_
+- <span style="color: green;">&#x2705;</span> **Fetches all cats** — _34ms_
+- <span style="color: green;">&#x2705;</span> **Fetches a specific cat** — _3ms_
+- <span style="color: green;">&#x2705;</span> **Handles invalid cat names** — _64ms_
+- <span style="color: green;">&#x2705;</span> **Handles unknown parameters gracefully** — _2ms_
+- <span style="color: green;">&#x2705;</span> **Case-insensitive for cat names** — _2ms_
+- <span style="color: green;">&#x2705;</span> **Returns correct headers** — _3ms_
 
 <h4> Update Operations: </h4>
-- ✅ **Updates cat outside status** — _7ms_
-- ✅ **Handles invalid `isOutside` values** — _5ms_
-- ✅ **Handles concurrent updates correctly** — _7ms_
+- <span style="color: green;">&#x2705;</span> **Updates cat outside status** — _7ms_
+- <span style="color: green;">&#x2705;</span> **Handles invalid `isOutside` values** — _5ms_
+- <span style="color: green;">&#x2705;</span> **Handles concurrent updates correctly** — _7ms_
+- <span style="color: green;">&#x2705;</span> **Toggles outside status multiple times** — _19ms_
+- <span style="color: green;">&#x2705;</span> **Handles idempotent updates** — _4ms_
+- <span style="color: green;">&#x2705;</span> **Sets all cats to outside status** — _6ms_
 
-- **Test Suites**: ✅ 1 passed
-- **Tests**: ✅ 12 passed
+---
+
+
+- **Test Suites**: <span style="color: green;">1 passed</span>, 1 total
+- **Tests**: <span style="color: green;">12 passed</span>, 12 total
+
 </pre>
 </details>
+
 
 ---
 
