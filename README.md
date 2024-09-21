@@ -22,6 +22,9 @@ Access the live site: [Kitty Kontroller](https://kittykontroller.azurewebsites.n
 
 ### Building Locally
 1. Clone the repository.
+```bash
+git clone https://github.com/cheeseonamonkey/KittyController/ -O ./KittyKontroller
+```
 2. Install dependencies:
    ```bash
    npm install
