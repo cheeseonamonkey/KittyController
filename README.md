@@ -1,12 +1,40 @@
 # Kitty Kontroller - README
 
-Kitty Kontroller is a simple web app to manage and monitor the status of cats (whether they are inside or outside).
+Kitty Kontroller is a simple web app designed to manage and monitor the status of cats, allowing users to track whether they are inside or outside.
 
+> 1. [Usage](#usage)
+> 2. [API Documentation](#api-documentation)
+>    - [1.1 Get All Cats](#1-get-all-cats)
+>    - [1.2 Get Cat by Name](#2-get-cat-by-name)
+>    - [1.3 Update Cat's Outside Status](#3-update-cats-outside-status)
+>    - [1.4 Error Responses](#error-responses)
+> 3. [Tests](#tests)
+> 4. [Release Version Notes](#release-version-notes)
+> 5. [License](#license)
+
+
+## Usage
+
+You can access the live site here: [Kitty Kontroller](https://kittykontroller.azurewebsites.net).
+
+### Building Locally
+To build and run Kitty Kontroller locally:
+1. Clone the repository.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the server:
+   ```bash
+   npm start
+   ```
+
+Visit `http://localhost:3000` in your browser to use the app.
 
 ---
 
 ## API Documentation
-Can also be found at: `/api/`.
+Access the API documentation at: [https://kittykontroller.azurewebsites.net/api/](https://kittykontroller.azurewebsites.net/api/)
 
 ### 1. **Get All Cats**
 - **Endpoint**: `GET /api/cats`
@@ -38,15 +66,15 @@ Can also be found at: `/api/`.
 ---
 
 ## Tests
-
-Thorough unit testing is implemented; while hosting on port 3000, to run tests:
+Thorough unit testing is implemented. To run tests while hosting on port 3000:
 ```bash
 npx test
 ```
 
-### <u>Test results</u>:
+
 
 <details>
+<summary><b><u>Test Results</u></b>:</summary>
 <pre style="font-family: monospace;">
 
 <h4> Fetch Operations: </h4>
@@ -71,12 +99,17 @@ npx test
 - **Test Suites**: <span style="color: green;">1 passed</span>, 1 total
 - **Tests**: <span style="color: green;">12 passed</span>, 12 total
 
-
 </pre>
 </details>
 
+---
 
+## Release Version Notes
 
+### Version 0.1
+- Initial release with basic functionality for managing cat status.
+
+---
 
 ## License
 
