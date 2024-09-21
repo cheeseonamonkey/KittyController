@@ -102,13 +102,12 @@ npx test
   - refresh button
   - last updated time for each cat
 #### Planned:
-- _(server)_ Do not update time if the existing time is within the last 60 seconds.
-- _(client)_ Add pictures for each cat.
-- _(client)_ Better UI for touchscreens. 
+- (server-sidez) Do not update time if the existing time is within the last 60 seconds.
+- 
 #### Maybe in the future?
-- wrap as android app?
-- push notifications?? (either via android app, firebase, or chrome)
-- dark mode switch?
+- wrap as android app
+- push notifications?
+- password authentication? 
 
 
 ---
