@@ -4,16 +4,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KittyKontrol</title>
-    <link href="dist/styles.css" rel="stylesheet">
+    <title>Cat Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .draggable {
+            cursor: grab;
+        }
+
+        .dragging {
+            opacity: 0.5;
+        }
+    </style>
 </head>
 
-<body class="bg-slate-100 flex items-center justify-center min-h-screen">
-    <div class="text-center p-2">
-        <h1 class="text-3xl font-bold mb-3">KittyKontroller</h1>
-
+<body class="bg-gray-100 flex flex-col justify-center items-center h-screen p-4">
+    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 w-full max-w-3xl">
+        <div id="inside" class="bg-white p-4 rounded shadow-lg flex-1">
+            <h2 class="text-xl font-semibold mb-4">Inside</h2>
+            <div id="inside-list" class="space-y-2"></div>
+        </div>
+        <div id="outside" class="bg-white p-4 rounded shadow-lg flex-1">
+            <h2 class="text-xl font-semibold mb-4">Outside</h2>
+            <div id="outside-list" class="space-y-2"></div>
+        </div>
     </div>
-    <script src="dist/bundle.js"></script>
+
+    <script>
+        const apiUrl = '/api/cats';
+        const insideList = document.getElementById('inside-list');
+        const outsideList = document.getElementById('outside-list');
+
+        const fetchCats = async () => {
+            const response = await fetch(apiUrl);
+            const cats = await response.json();
+            renderCats(cats);
+        };
+
+        const renderCats = (cats) => {
+            insideList.innerHTML = '';
+            outsideList.innerHTML = '';
+
+            cats.forEach(cat => {
+                const catElement = document.createElement('div');
+                catElement.className = 'draggable bg-gray-200 p-2 rounded shadow cursor-pointer';
+                catElement.draggable = true;
+                catElement.innerText = cat.name;
+
+                catElement.addEventListener('click', async () => {
+                    const newStatus = !cat.isOutside; // Toggle status
+                    await updateCatStatus(cat.name, newStatus);
+                    fetchCats();
+                });
+
+                catElement.addEventListener('dragstart', () => {
+                    catElement.classList.add('dragging');
+                    catElement.dataset.catName = cat.name;
+                });
+
+                catElement.addEventListener('dragend', () => {
+                    catElement.classList.remove('dragging');
+                });
+
+                insideList.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                });
+
+                outsideList.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                });
+
+                insideList.addEventListener('drop', async (e) => {
+                    e.preventDefault();
+                    await updateCatStatus(cat.name, false); // Set as inside
+                    fetchCats();
+                });
+
+                outsideList.addEventListener('drop', async (e) => {
+                    e.preventDefault();
+                    await updateCatStatus(cat.name, true); // Set as outside
+                    fetchCats();
+                });
+
+                // Initially categorize cats based on their status
+                if (cat.isOutside) {
+                    outsideList.appendChild(catElement);
+                } else {
+                    insideList.appendChild(catElement);
+                }
+            });
+        };
+
+        const updateCatStatus = async (catName, isOutside) => {
+            await fetch(`${apiUrl}/${catName}?isOutside=${isOutside}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+        };
+
+        fetchCats();
+    </script>
 </body>
 
 </html>

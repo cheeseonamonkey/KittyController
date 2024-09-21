@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import { loadCats, saveCats } from './io.js';
 import Cat from './models/Cat.js';
 
@@ -8,8 +9,14 @@ let cats = [];
 
 app.use(express.json());
 
-app.get('/api/cats', (req, res) => {
-    res.json(cats);
+app.get('/api/cats', (req, res) => res.json(cats));
+
+app.get('/api/', (req, res) => {
+    res.sendFile(path.resolve('data/apiDocs.md'));
+});
+
+app.get('/', (req, res) => {
+    res.sendFile(path.resolve('index.html'));
 });
 
 app.get('/api/cats/:name', async (req, res) => {
@@ -17,21 +24,25 @@ app.get('/api/cats/:name', async (req, res) => {
         const catName = req.params.name.toLowerCase();
         const cat = cats.find(c => c.name.toLowerCase() === catName);
 
-        if (!cat)
+        if (!cat) {
             return res.status(404).json('Cat not found');
+        }
 
         const isOutside = req.query.isOutside;
 
-        if (isOutside === undefined || isOutside === null)
+        if (isOutside === undefined || isOutside === null) {
             return res.json(cat);
+        }
 
         const isOutsideLower = isOutside.toLowerCase();
 
-        if (isOutsideLower !== 'true' && isOutsideLower !== 'false')
+        if (isOutsideLower !== 'true' && isOutsideLower !== 'false') {
             return res.status(422).json('Invalid isOutside value. Use "true" or "false".');
+        }
 
         const newStatus = isOutsideLower === 'true';
         cat.setOutside(newStatus);
+        cat.lastUpdate = Math.floor(Date.now() / 1000); // Update lastUpdate to current time in seconds
         await saveCats(cats);
         res.sendStatus(204);
     } catch (error) {
