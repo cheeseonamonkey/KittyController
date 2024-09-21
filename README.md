@@ -41,14 +41,12 @@ Can also be found at: `/api/`.
 
 ## Tests
 
-While hosting on port 3000, to run tests:
+Thorough unit testing is implemented; while hosting on port 3000, to run tests:
 ```bash
-npm test
+npx test
 ```
-or
-```bash
-npx jest
-```
+
+#### Test results:
 
 
 ```diff
